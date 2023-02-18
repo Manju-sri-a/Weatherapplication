@@ -5,10 +5,6 @@ const weatherDetails = document.querySelector('.weather-details');
 const weatherday = document.querySelector('.daysdetails');
 const error404 = document.querySelector('.not-found');
 const dayydetails = document.querySelector('.daysdetails');
- let slideIndex = 1;
- const prev= document.querySelector('.prev');
- const next= document.querySelector('.next');
-
 
 search.addEventListener('click', () =>{
 
@@ -16,25 +12,12 @@ search.addEventListener('click', () =>{
     const city = document.querySelector('.search-box input').value;
     
     console.log(city)
-
-   
-        navigator.geolocation.getCurrentPosition((location =>{
-            var lat = location.coords.latitude;
-            var lon = location.coords.longitude;
-
-            var url = '';
-            if (city === '') {
-                url = "http://api.weatherapi.com/v1/forecast.json?key="+APIKey+"&q="+city+"&aqi=no&days=7"
-            } else {
-                url = "http://api.weatherapi.com/v1/forecast.json?key="+APIKey+"&q="+lat+ "," + lon + "&aqi=no&days=7"
-            }
-            console.log('Latitude', lat)    
-
-            fetch(url)
-                .then(response => {
-                
+            if (city === '')
+            return;
+            fetch("http://api.weatherapi.com/v1/forecast.json?key="+APIKey+"&q="+city+"&aqi=no&days=7")
+                .then(response => {   
                 return response.json();
-            })
+                })
                 .then(response => {
                         if (response.error) {
                             container.style.height = '400px';
@@ -133,10 +116,8 @@ search.addEventListener('click', () =>{
                     day7.innerHTML=`${response.forecast.forecastday[6].date}`;
                     day7image.src='http:'+`${response.forecast.forecastday[6].day.condition.icon}`;
                     day7tempc.innerHTML=`${parseInt(response.forecast.forecastday[6].day.avgtemp_c)}`+" °C";
-                    day7tempf.innerHTML=`${parseInt(response.forecast.forecastday[6].day.avgtemp_f)}`+" °F";
-                    showSlides(slideIndex);        
-                }
-                });
+                    day7tempf.innerHTML=`${parseInt(response.forecast.forecastday[6].day.avgtemp_f)}`+" °F";       
+}});
 
                     
                     weatherBox.style.display = '';
@@ -145,10 +126,7 @@ search.addEventListener('click', () =>{
                     weatherDetails.classList.add('fadeIn');
                     dayydetails.classList.add('fadeIn');
                     container.style.height = '595px';
-                
-            }));
-                    
-        });
-                    
+
+        });   
 
 
